@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+requests
+python-multipart
+sqlite3-binary; python_version<'3.9'  # sqlite3 is builtin; this line safe to ignore if pip errors
+streamlit
+pandas
+numpy
