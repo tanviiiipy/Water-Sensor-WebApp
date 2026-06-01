@@ -1,5 +1,5 @@
 # backend/models.py
-from .db import fetchall, fetchone, execute, update
+from db import fetchall, fetchone, execute, update
 import json
 import pandas as pd
 import numpy as np
