@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 import models as M
 import db
+import random
 
 app = FastAPI(title="WaterSense Backend")
 
