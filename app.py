@@ -26,13 +26,23 @@ TEAM_MEMBERS = ["Tanvi", "Neha", "Riya", "Nikhita"]
 def api_get(path):
     return requests.get(BACKEND_URL + path).json()
 
-def api_post(path, data=None, files=None):
+def api_post(path, data=None, files=None, json_payload=None):
     if files:
         return requests.post(BACKEND_URL + path, files=files).json()
-    return requests.post(BACKEND_URL + path, data=data).json()
+
+    if json_payload is not None:
+        return requests.post(
+            BACKEND_URL + path,
+            json_payload=json_payload
+        ).json()
+
+    return requests.post(
+        BACKEND_URL + path,
+        data=data
+    ).json()
 
 def api_put(path, json_payload):
-    return requests.put(BACKEND_URL + path, json=json_payload).json()
+    return requests.put(BACKEND_URL + path, json_payload=json_payload).json()
 
 def api_delete(path):
     return requests.delete(BACKEND_URL + path).json()
@@ -295,16 +305,16 @@ def game_page():
     # controls
     c1, c2, c3, c4 = st.columns(4)
     if c1.button("⬅️ Left"):
-        api_post("/game/action", json={"action": "move", "bucket": "left"})
+        api_post("/game/action", json_payload={"action": "move", "bucket": "left"})
         st.experimental_rerun()
     if c2.button("⬆️ Middle"):
-        api_post("/game/action", json={"action": "move", "bucket": "middle"})
+        api_post("/game/action", json_payload={"action": "move", "bucket": "middle"})
         st.experimental_rerun()
     if c3.button("➡️ Right"):
-        api_post("/game/action", json={"action": "move", "bucket": "right"})
+        api_post("/game/action", json_payload={"action": "move", "bucket": "right"})
         st.experimental_rerun()
     if c4.button("Catch!"):
-        res = api_post("/game/action", json={"action":"catch", "bucket":bucket})
+        res = api_post("/game/action", json_payload={"action":"catch", "bucket":bucket})
         if res.get("result") == "caught":
             st.session_state["local_game_feedback"] = "💧 You caught the drop!"
         else:
@@ -316,10 +326,10 @@ def game_page():
     if state['score'] >= 20:
         st.balloons()
         st.success("🏆 You win! Water saved!")
-        api_post("/game/action", json={"action":"reset"})  # reset for next run if desired
+        api_post("/game/action", json_payload={"action":"reset"})  # reset for next run if desired
     elif state['missed'] > 10:
         st.error("💧 Game over! Too much water wasted.")
-        api_post("/game/action", json={"action":"reset"})
+        api_post("/game/action", json_payload={"action":"reset"})
 
 # ------------------- MAIN ROUTER -------------------
 st.set_page_config(page_title=APP_NAME, layout="wide", initial_sidebar_state="expanded")
